@@ -1,25 +1,13 @@
 import styled from "styled-components";
-
-const Container = styled.div`
-  display: flex;
-  height:100vh;
-  width: 100%;
-  justify-content: center;
-  align-items: center;
-  background-color: ${(props) => props.theme.backgroundColor};
-`
-const TitleHa = styled.h1`
-  color: ${(props) => props.theme.textColor};
-`
-
+import Circle from "./Circle";
 
 function App() {
 
   return (
-    <Container>
-      <TitleHa>Hello</TitleHa>
-      
-    </Container>
+    <div>
+      <Circle bgColor="teal" />
+      <Circle bgColor="tomato" />
+    </div>
   );
 }
 
