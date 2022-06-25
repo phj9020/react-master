@@ -3,9 +3,9 @@ import { DarkTheme, DefaultTheme } from "styled-components"
 // create theme
 
 const theme: DefaultTheme = {
-    textColor: "black",
-    bgColor : "white",
-    btnColor : "tomato",
+    textColor: "#ecf0f1",
+    bgColor : "#34495e",
+    accentColor : "#2ecc71",
 }
 
 
