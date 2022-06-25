@@ -1,12 +1,11 @@
 import React from 'react';
-import Circle from "./Circle";
+import Form from './Formtest';
+
 
 function App() {
-
   return (
     <div>
-      <Circle bgColor="purple" borderColor="yellow" />
-      <Circle bgColor="tomato" text="string exist" />
+      <Form />
     </div>
   );
 }
