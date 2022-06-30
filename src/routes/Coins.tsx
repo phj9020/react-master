@@ -16,10 +16,7 @@ const Header = styled.header`
     align-items: center;
 `;
 
-const Index = styled.span`
-    display: inline-block;
-    margin-right: 5px;
-`;
+
 
 const Loader = styled.div`
     display: flex;
@@ -52,6 +49,18 @@ const Coin = styled.li`
     }
     
 `;
+
+const CoinWrapper = styled.div`
+    display: flex;
+    align-items: center;
+`
+const Index = styled.span``;
+
+const Symbol = styled.img`
+    width: 30px;
+    height: 30px;
+    margin: 0px 10px;
+`
 
 
 const Title = styled.h1`
@@ -95,8 +104,11 @@ function Coins() {
                     {coins.map((coin, index) =>
                         <Coin key={coin.id}>
                             <Link to={coin.id}>
-                                <Index>{index + 1}.</Index>
-                                {coin.name} &rarr;
+                                <CoinWrapper>
+                                    <Index>{index + 1}.</Index>
+                                    <Symbol src={`https://coinicons-api.vercel.app/api/icon/${coin.symbol.toLowerCase()}`} />
+                                    {coin.name} &rarr;
+                                </CoinWrapper>
                             </Link>
                         </Coin>
                     )}
