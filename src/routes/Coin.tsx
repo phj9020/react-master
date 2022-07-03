@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { Route } from 'react-router-dom';
-import { Routes, useParams } from "react-router-dom";
+import { Link, Outlet, useMatch, useParams } from 'react-router-dom';
 import styled from 'styled-components';
-import Chart from './Chart';
-import Price from './Price';
+
 
 const Container = styled.div`
     max-width: 480px;
@@ -57,6 +55,27 @@ const Description = styled.p`
     margin: 20px 0px;
 `;
 
+const Tabs = styled.div`
+    margin: 20px 0px;
+    display: grid;
+    grid-template-columns:repeat(2, 1fr);
+    gap: 10px;
+    
+`
+const Tab = styled.div<{isActive: boolean}>`
+    background-color:rgba(0, 0, 0, 0.5);
+    padding: 7px 0px;
+    text-align: center;
+    text-transform: uppercase;
+    font-size:12px;
+    font-weight: 600;
+    padding:10px 0px;
+    border-radius: 8px;
+    color: ${(props) => props.isActive ? props.theme.accentColor : props.theme.textColor};
+    a {
+        display: block;
+    }
+`
 
 interface ITag {
     id: string;
@@ -129,6 +148,8 @@ function Coin() {
     const [loading, setLoading] = useState(true);
     const [info, setInfo] = useState<IinfoData>();
     const [priceInfo, setPriceInfo] = useState<IpriceData>();
+    const priceMatch = useMatch("/:coinID/price");
+    const chartMatch = useMatch("/:coinID/chart");
 
     useEffect(() => {
         (async () => {
@@ -178,10 +199,19 @@ function Coin() {
                                 <span>{priceInfo && priceInfo.max_supply}</span>
                             </OverviewItem>
                         </Overview>
-                        <Routes>
-                            <Route path="/price" element={<Price />} />
-                            <Route path="/chart" element={<Chart />} />
-                        </Routes>
+                        <Tabs>
+                            <Tab isActive={chartMatch !== null}>
+                                <Link to="chart">
+                                    Chart
+                                </Link>
+                            </Tab>
+                            <Tab isActive={priceMatch !== null}>
+                                <Link to="price">
+                                    Price
+                                </Link>
+                            </Tab>
+                        </Tabs>
+                        <Outlet />
                     </>
                 )
             }
