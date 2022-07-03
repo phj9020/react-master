@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
+import { useQuery } from 'react-query';
 import { Link, Outlet, useMatch, useParams } from 'react-router-dom';
 import styled from 'styled-components';
-
+import { fetchCoinInfo, fetchPriceInfo } from '../api';
 
 const Container = styled.div`
     max-width: 480px;
@@ -142,28 +143,20 @@ interface IpriceData {
     }
 }
 
+type IParams = {
+    coinID: string;
+}
+
 
 function Coin() {
-    const { coinID } = useParams();
-    const [loading, setLoading] = useState(true);
-    const [info, setInfo] = useState<IinfoData>();
-    const [priceInfo, setPriceInfo] = useState<IpriceData>();
+    const { coinID } = useParams<IParams>();
     const priceMatch = useMatch("/:coinID/price");
     const chartMatch = useMatch("/:coinID/chart");
+    
+    const {isLoading: infoLoading, data: infoData} = useQuery<IinfoData>(["info", coinID], () => fetchCoinInfo(coinID!));
+    const {isLoading: tickersLoading, data: ticklersData} = useQuery<IpriceData>(["tickers", coinID], () => fetchPriceInfo(coinID!));
 
-    useEffect(() => {
-        (async () => {
-            const infoData = await (
-                await fetch(`https://api.coinpaprika.com/v1/coins/${coinID}`)).json();
-
-            const priceData = await (
-                await fetch(`https://api.coinpaprika.com/v1/tickers/${coinID}`)).json();
-
-            setInfo(infoData);
-            setPriceInfo(priceData);
-            setLoading(false);
-        })();
-    }, [])
+    const loading = infoLoading || tickersLoading;
 
     return (
         <Container>
@@ -177,26 +170,26 @@ function Coin() {
                         <Overview>
                             <OverviewItem>
                                 <span>Rank:</span>
-                                <span>{info && info.rank}</span>
+                                <span>{infoData && infoData.rank}</span>
                             </OverviewItem>
                             <OverviewItem>
                                 <span>Symbol:</span>
-                                <span>{info && info.symbol}</span>
+                                <span>{infoData && infoData.symbol}</span>
                             </OverviewItem>
                             <OverviewItem>
                                 <span>Open Source:</span>
-                                <span>{info && info.open_source ? "Yes" : "No"}</span>
+                                <span>{infoData && infoData.open_source ? "Yes" : "No"}</span>
                             </OverviewItem>
                         </Overview> 
-                        <Description>{info && info.description}</Description>
+                        <Description>{infoData && infoData.description}</Description>
                         <Overview>
                             <OverviewItem>
                                 <span>Total Supply:</span>
-                                <span>{priceInfo && priceInfo.total_supply}</span>
+                                <span>{ticklersData && ticklersData.total_supply}</span>
                             </OverviewItem>
                             <OverviewItem>
                                 <span>Max  Supply:</span>
-                                <span>{priceInfo && priceInfo.max_supply}</span>
+                                <span>{ticklersData && ticklersData.max_supply}</span>
                             </OverviewItem>
                         </Overview>
                         <Tabs>
