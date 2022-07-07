@@ -5,10 +5,14 @@ export function fetchCoins(){
     return fetch(`${BASE_URL}/coins`).then(response => response.json());
 }
 
-export function fetchCoinInfo(coinID: string ){
+export function fetchCoinInfo(coinID: string){
     return fetch(`${BASE_URL}/coins/${coinID}`).then(response => response.json());
 }
 
-export function fetchPriceInfo(coinID: string  ) {
+export function fetchPriceInfo(coinID: string) {
     return fetch(`${BASE_URL}/tickers/${coinID}`).then(response => response.json());
+}
+
+export function fetchChartInfo(coinID: string) {
+    return fetch(`https://ohlcv-api.nomadcoders.workers.dev?coinId=${coinID}`).then(response => response.json());
 }

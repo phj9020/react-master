@@ -1,4 +1,5 @@
 import React from 'react';
+import { Helmet } from 'react-helmet';
 import { useQuery } from 'react-query';
 import { Link } from 'react-router-dom';
 import styled  from 'styled-components';
@@ -85,6 +86,10 @@ function Coins() {
 
     return (
         <Container>
+            <Helmet>
+                <meta charSet="utf-8" />
+                <title>코인베이스</title>
+            </Helmet>
             <Header>
                 <Title>코인</Title>
             </Header>

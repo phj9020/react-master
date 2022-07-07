@@ -1,8 +1,9 @@
 import React from 'react';
 import { useQuery } from 'react-query';
-import { Link, Outlet, useMatch, useParams } from 'react-router-dom';
+import { Link, Outlet, useMatch, useParams, useNavigate  } from 'react-router-dom';
 import styled from 'styled-components';
 import { fetchCoinInfo, fetchPriceInfo } from '../api';
+import {Helmet} from "react-helmet";
 
 const Container = styled.div`
     max-width: 480px;
@@ -77,6 +78,21 @@ const Tab = styled.div<{isActive: boolean}>`
         display: block;
     }
 `
+const BackBtn = styled.div`
+    background-color:rgba(0, 0, 0, 0.5);
+    padding: 7px 0px;
+    text-align: center;
+    text-transform: uppercase;
+    font-size:12px;
+    font-weight: 600;
+    padding:10px 0px;
+    border-radius: 8px;
+    margin-bottom:10px;
+    width: 100px;
+    a {
+        display: block;
+    }
+`
 
 interface ITag {
     id: string;
@@ -143,7 +159,7 @@ interface IpriceData {
     }
 }
 
-type IParams = {
+export type IParams = {
     coinID: string;
 }
 
@@ -152,21 +168,33 @@ function Coin() {
     const { coinID } = useParams<IParams>();
     const priceMatch = useMatch("/:coinID/price");
     const chartMatch = useMatch("/:coinID/chart");
+
     
     const {isLoading: infoLoading, data: infoData} = useQuery<IinfoData>(["info", coinID], () => fetchCoinInfo(coinID!));
-    const {isLoading: tickersLoading, data: ticklersData} = useQuery<IpriceData>(["tickers", coinID], () => fetchPriceInfo(coinID!));
+    // refetchInterval : call API every 5sec 
+    const {isLoading: tickersLoading, data: ticklersData} = useQuery<IpriceData>(["tickers", coinID], () => fetchPriceInfo(coinID!),
+        {
+            refetchInterval: 5000,
+        });
 
     const loading = infoLoading || tickersLoading;
 
     return (
         <Container>
+            <Helmet>
+                <meta charSet="utf-8" />
+                <title>{coinID} | 코인베이스</title>
+            </Helmet>
             <Header>
-                <Title>{coinID}</Title>
+            <Title>{coinID}</Title>
             </Header>
             {loading ?
                 (<Loader><img src="/Spinner.gif" alt="loading" /></Loader>)
                 : (
                     <>
+                        <BackBtn>
+                            <Link to={"/"} >Back</Link>
+                        </BackBtn>
                         <Overview>
                             <OverviewItem>
                                 <span>Rank:</span>
@@ -177,8 +205,8 @@ function Coin() {
                                 <span>{infoData && infoData.symbol}</span>
                             </OverviewItem>
                             <OverviewItem>
-                                <span>Open Source:</span>
-                                <span>{infoData && infoData.open_source ? "Yes" : "No"}</span>
+                                <span>Price:</span>
+                                <span>{infoData && ticklersData!.quotes.USD.price.toFixed(0)}</span>
                             </OverviewItem>
                         </Overview> 
                         <Description>{infoData && infoData.description}</Description>
