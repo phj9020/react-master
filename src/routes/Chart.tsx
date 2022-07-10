@@ -5,6 +5,8 @@ import { useQuery } from 'react-query';
 import { fetchChartInfo } from '../api';
 import ApexChart from "react-apexcharts";
 import styled  from 'styled-components';
+import { useRecoilValue } from 'recoil';
+import { isDarkAtom } from './../atoms';
 
 const Loader = styled.div`
     display: flex;
@@ -28,14 +30,12 @@ interface IChartData {
     market_cap: number;
 }
 
-interface IChartProps {
-    isDark: boolean;
-}
 
-function Chart({isDark} : IChartProps){
+
+function Chart(){
     const {coinID} = useParams<IParams>();
     const {isLoading, data} = useQuery<IChartData[]>('highLowValue', ()=> fetchChartInfo(coinID!))
-   
+    const isDark = useRecoilValue(isDarkAtom);
     return (
         <div>{isLoading ? <Loader><img src="/Spinner.gif" alt="loading" /></Loader> : 
             <ApexChart type="line"
