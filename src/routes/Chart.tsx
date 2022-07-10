@@ -28,11 +28,14 @@ interface IChartData {
     market_cap: number;
 }
 
+interface IChartProps {
+    isDark: boolean;
+}
 
-function Chart(){
+function Chart({isDark} : IChartProps){
     const {coinID} = useParams<IParams>();
     const {isLoading, data} = useQuery<IChartData[]>('highLowValue', ()=> fetchChartInfo(coinID!))
-    console.log(data)
+   
     return (
         <div>{isLoading ? <Loader><img src="/Spinner.gif" alt="loading" /></Loader> : 
             <ApexChart type="line"
@@ -44,7 +47,7 @@ function Chart(){
             ]}
             options={{
                 theme: {
-                    mode: 'dark'
+                    mode: isDark ? "dark" : "light"
                 },
                 chart : {
                     height: 500, 

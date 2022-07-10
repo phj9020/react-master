@@ -7,11 +7,13 @@ declare module 'styled-components' {
         textColor: string;
         bgColor: string;
         accentColor: string;
+        cardColor: string;
     }
     
     export interface DarkTheme {
         textColor: string;
         bgColor: string;
         accentColor: string;
+        cardColor: string;
     }
 }

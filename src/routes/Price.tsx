@@ -41,7 +41,7 @@ const PercentChange = styled.div`
 
 function Price(){
     const {coinID} = useParams();
-    const {isLoading, data} = useQuery<IpriceData>("Test", () => fetchPriceInfo(coinID!))
+    const {isLoading, data} = useQuery<IpriceData>("Price % Change", () => fetchPriceInfo(coinID!))
     console.log(data && data.quotes.USD.percent_change_1h)
     return (
         <>

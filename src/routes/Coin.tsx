@@ -164,6 +164,8 @@ export type IParams = {
 }
 
 
+
+
 function Coin() {
     const { coinID } = useParams<IParams>();
     const priceMatch = useMatch("/:coinID/price");
