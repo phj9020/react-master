@@ -32,7 +32,7 @@ interface IChartData {
 function Chart(){
     const {coinID} = useParams<IParams>();
     const {isLoading, data} = useQuery<IChartData[]>('highLowValue', ()=> fetchChartInfo(coinID!))
-
+    console.log(data)
     return (
         <div>{isLoading ? <Loader><img src="/Spinner.gif" alt="loading" /></Loader> : 
             <ApexChart type="line"

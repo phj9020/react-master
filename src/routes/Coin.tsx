@@ -125,7 +125,7 @@ interface IinfoData {
 
 
 
-interface IpriceData {
+export interface IpriceData {
     id: string;
     name: string;
     symbol: string;
